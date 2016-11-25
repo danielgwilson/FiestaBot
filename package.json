@@ -1,0 +1,22 @@
+{
+  "name": "fiestabot",
+  "version": "1.0.0",
+  "description": "Junction 2016 (Helsinki, Finland) AI chatbot for planning dinner parties, cocktails, and more.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danielgwilson/FiestaBot.git"
+  },
+  "keywords": [
+    "party"
+  ],
+  "author": "Daniel G. Wilson, Parker Place, Winston Wright",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/danielgwilson/FiestaBot/issues"
+  },
+  "homepage": "https://github.com/danielgwilson/FiestaBot#readme"
+}
