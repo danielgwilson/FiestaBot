@@ -38,6 +38,7 @@ intents.matches('change name', [
     },
     function (session, results) {
         if (results.response) {
+            session.userData.name = results.response;
             session.send('Okay... Changed your name to %s', session.userData.name);
         } else {
             session.send('Okay.')
