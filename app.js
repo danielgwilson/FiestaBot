@@ -4,28 +4,28 @@ var http = require("http");
 
 // Watson
 
-var options = {
-  "method": "POST",
-  "hostname": "api.ibm.com",
-  "port": null,
-  "path": "/chefwatson/api/v1/flavor-combinations/generator",
-  "headers": {
-      "accept": "application/json",
-      "content-type": "application/json",
-  }
-  }
-
-  // Set up the request
-  var post_req = http.request(post_options, function(res) {
-      res.setEncoding('utf8');
-      res.on('data', function (chunk) {
-          console.log('Response: ' + chunk);
-      });
-  });
-
-  // post the data
-  post_req.write(post_data);
-  post_req.end();
+// var options = {
+//   "method": "POST",
+//   "hostname": "api.ibm.com",
+//   "port": null,
+//   "path": "/chefwatson/api/v1/flavor-combinations/generator",
+//   "headers": {
+//       "accept": "application/json",
+//       "content-type": "application/json",
+//   }
+//   }
+//
+//   // Set up the request
+//   var post_req = http.request(post_options, function(res) {
+//       res.setEncoding('utf8');
+//       res.on('data', function (chunk) {
+//           console.log('Response: ' + chunk);
+//       });
+//   });
+//
+//   // post the data
+//   post_req.write(post_data);
+//   post_req.end();
 
 //=========================================================
 // Bot Setup
@@ -92,7 +92,7 @@ intents.matches('ingredients,'[
 
 // Hi nice to meet you, what's your name
 // Wanna have a party? What ingredients do you have
-// 
+//
 intents.matches('addIngredient', '/addIngredient');
 // intents.matches('addMusic', '/addMusic')
 
@@ -160,5 +160,3 @@ bot.dialog('/recommendMusic', [
         builder.Prompts.text(session, "What artists do you like?")
     }
 ])
-
-
