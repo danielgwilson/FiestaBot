@@ -23,13 +23,13 @@ server.post('/api/messages', connector.listen());
 // Bots Dialogs
 //=========================================================
 
-var recognizer = new builder.LuisRecognizer('https://api.projectoxford.ai/luis/v2.0/apps/f0b89ad3-f79f-4aca-860a-09d4b77cd822?subscription-key=3ab22a9d89834a12a858adba547ab529&verbose=true');
+var recognizer = new builder.LuisRecognizer('https://api.projectoxford.ai/luis/v2.0/apps/2420934d-e9c4-476e-b186-59acfe37bad0?subscription-key=33eb75ecc58540f1a7cb15d107fd23e4&verbose=true');
 var intents = new builder.IntentDialog({ recognizers: [recognizer] });
 bot.dialog('/', intents);
 
 intents.matches('change name', [
-    function (session, args, next) {
-        var name = builder.EntityRecognizer.findEntity(args.entities, 'name');
+    function (session, results, next) {
+        var name = builder.EntityRecognizer.findEntity(results.entities, 'name');
         if (!name) {
             builder.Prompts.text(session, "Okay, what would you like me to call you?");
         } else {
@@ -44,9 +44,34 @@ intents.matches('change name', [
         }
     }
 ]);
+intents.matches('ingredients,'[
+    function(session, results){
+        console.log("~~~~", results.response.entity)
+        console.log("INTENTS 2", intents)
+        if(results.response.entity === "See ingredients"){
+            if(session.userData.ingredients){
+                 session.send("You currently have "+ session.userData.ingredients.join(", "))
+            }
+            else{
+                session.send("You haven't added any ingredients")
+            }
+        }
+        else{
+            session.send("You sent a wrong response")
+        }
+    }
+    ]
+)
+
+// Hi nice to meet you, what's your name
+// Wanna have a party? What ingredients do you have
+// 
+intents.matches('addIngredient', '/addIngredient');
+// intents.matches('addMusic', '/addMusic')
+
 
 intents.onDefault([
-    function (session, args, next) {
+    function (session, results, next) {
         if (!session.userData.name) {
             session.beginDialog('/profile');
         } else {
@@ -55,8 +80,26 @@ intents.onDefault([
     },
     function (session, results) {
         session.send('Hello %s!', session.userData.name);
+        builder.Prompts.choice(session, "What would you like to do? Type it in or check your smart reccomendations", "See ingredients|See music")
+    },
+    function(session, results){
+        console.log("~~~~", results.response.entity)
+        console.log("INTENTS 2", intents)
+        if(results.response.entity === "See ingredients"){
+            if(session.userData.ingredients){
+                 session.send("You currently have "+ session.userData.ingredients.join(", "))
+            }
+            else{
+                session.send("You haven't added any ingredients")
+            }
+        }
+        else{
+            session.send("You sent a wrong response")
+        }
     }
 ]);
+
+//dialog GET's
 
 bot.dialog('/profile', [
     function (session) {
@@ -64,6 +107,31 @@ bot.dialog('/profile', [
     },
     function (session, results) {
         session.userData.name = results.response;
-        session.endDialog();
     }
 ]);
+
+bot.dialog('/addIngredient', [
+    function(session, results, next){
+        var ingredient = builder.EntityRecognizer.findEntity(results.entities, 'ingredient');
+        if (!ingredient) {
+            builder.Prompts.text(session, "What ingredients do you have?");
+        } else {
+            next({ response: ingredient.entity });
+        }
+    },
+    function(session, results){
+        if(results.response){
+            var ingredients = results.response.split(/[ ,]+/);
+            ingredients.forEach(ingredient => session.userData.ingredients.push(ingredient))
+            builder.Prompts.text(session, "You have added "+ session.userData.ingredients.join(", "))
+        }
+    }
+]);
+bot.dialog('/recommendMusic', [
+    function(session, results, next){
+        var music = //insert music understanding ai here
+        builder.Prompts.text(session, "What artists do you like?")
+    }
+])
+
+
