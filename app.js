@@ -1,5 +1,31 @@
 var builder = require('botbuilder');
 var restify = require('restify');
+var http = require("http");
+
+// Watson
+
+var options = {
+  "method": "POST",
+  "hostname": "api.ibm.com",
+  "port": null,
+  "path": "/chefwatson/api/v1/flavor-combinations/generator",
+  "headers": {
+      "accept": "application/json",
+      "content-type": "application/json",
+  }
+  }
+
+  // Set up the request
+  var post_req = http.request(post_options, function(res) {
+      res.setEncoding('utf8');
+      res.on('data', function (chunk) {
+          console.log('Response: ' + chunk);
+      });
+  });
+
+  // post the data
+  post_req.write(post_data);
+  post_req.end();
 
 //=========================================================
 // Bot Setup
