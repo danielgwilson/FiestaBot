@@ -27,12 +27,21 @@ var recognizer = new builder.LuisRecognizer('https://api.projectoxford.ai/luis/v
 var intents = new builder.IntentDialog({ recognizers: [recognizer] });
 bot.dialog('/', intents);
 
-intents.matches(/^change name/i, [
+intents.matches('change name', [
     function (session, args, next) {
-        session.beginDialog('/profile');
+        var name = builder.EntityRecognizer.findEntity(args.entities, 'name');
+        if (!name) {
+            builder.Prompts.text(session, "Okay, what would you like me to call you?");
+        } else {
+            next({ response: name.entity });
+        }
     },
     function (session, results) {
-        session.send('Ok... Changed your name to %s', session.userData.name);
+        if (results.response) {
+            session.send('Okay... Changed your name to %s', session.userData.name);
+        } else {
+            session.send('Okay.')
+        }
     }
 ]);
 
